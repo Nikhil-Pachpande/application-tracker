@@ -1,0 +1,22 @@
+{
+    "manifest_version": 3,
+    "name": "Job Application Tracker",
+    "version": "1.0",
+    "description": "Track your job applications",
+    "permissions": [
+      "storage"
+    ],
+    "action": {
+      "default_popup": "home.html",
+      "default_icon": {
+        "16": "icons/icon16.png",
+        "48": "icons/icon48.png",
+        "100": "icons/icon100.png"
+      }
+    },
+    "icons": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "100": "icons/icon100.png"
+    }
+  }  
