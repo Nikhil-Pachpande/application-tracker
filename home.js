@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const companyInput = createEditableField('text', 'company-name', app.company);
         const locationInput = createEditableField('text', 'location', app.location);
         const descriptionInput = createEditableField('textarea', 'description', app.description);
+        const skillsInput = createEditableField('text', 'skills', app.skills.join(', '));
         const statusDropdown = createStatusDropdown(app.status);
   
         // this will create the save button
@@ -29,12 +30,16 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
           }
   
-          // to update the application data in localStorage
+          // to split skills by commas and remove leading/trailing spaces
+          const skills = skillsInput.value.split(',').map(skill => skill.trim());
+  
+         // to update the application data in localStorage
           app.jobId = jobIdInput.value;
           app.title = jobTitleInput.value;
           app.company = companyInput.value;
           app.location = locationInput.value;
           app.description = descriptionInput.value;
+          app.skills = skills; // Save skills as an array
           app.status = statusDropdown.value;
   
           applications[index] = app; // to update the application in the array
@@ -42,13 +47,24 @@ document.addEventListener('DOMContentLoaded', function() {
           loadApplications(); // reloads the application list
         });
   
+        // this will create the delete button
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Delete Application';
+        deleteButton.addEventListener('click', function() {
+          applications.splice(index, 1); // to remove the application from the array
+          localStorage.setItem('applications', JSON.stringify(applications)); // save the application back to local storage after deleting
+          loadApplications(); // to reload the application list
+        });
+  
         li.appendChild(jobIdInput);
         li.appendChild(jobTitleInput);
         li.appendChild(companyInput);
         li.appendChild(locationInput);
         li.appendChild(descriptionInput);
+        li.appendChild(skillsInput);
         li.appendChild(statusDropdown);
         li.appendChild(saveButton);
+        li.appendChild(deleteButton);
         jobList.appendChild(li);
       });
     };
@@ -99,11 +115,12 @@ document.addEventListener('DOMContentLoaded', function() {
       const company = document.getElementById('company-name').value;
       const location = document.getElementById('location').value;
       const description = document.getElementById('description').value;
+      const skills = document.getElementById('skills').value.split(',').map(skill => skill.trim());
       const status = document.getElementById('status').value;
       const resume = document.getElementById('resume').files[0];
   
       // input validation
-      if (!jobId || !title || !company || !description) {
+      if (!jobId || !title || !company || !description || skills.length === 0) {
         alert('Please fill out all required fields.');
         return;
       }
@@ -117,6 +134,7 @@ document.addEventListener('DOMContentLoaded', function() {
             company,
             location,
             description,
+            skills,
             status,
             resume: e.target.result // to store the resume as base64 data
           };
