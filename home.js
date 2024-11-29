@@ -14,11 +14,15 @@ document.addEventListener('DOMContentLoaded', function() {
         const li = document.createElement('li');
         li.classList.add('job-item');
         li.innerHTML = `
-          <p><strong>Application ${index + 1}</strong></p>
-          <p>Job Title: ${app.title}</p>
-          <p>Company: ${app.company}</p>
-          <p>Status: ${app.status}</p>
-          <p><a href="${app.link}" target="_blank">Job Link</a></p>
+          <p>
+            <strong>Application ${index + 1}</strong>: 
+            Job ID: ${app.jobId}, 
+            Job Title: ${app.title}, 
+            Company: ${app.company}, 
+            Location: ${app.location || 'N/A'}, 
+            <a href="${app.link}" target="_blank">Job Link</a>, 
+            Status: ${app.status}
+          </p>
         `;
         jobList.appendChild(li);
       });
