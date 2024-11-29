@@ -8,6 +8,8 @@
 </head>
 <body>
   <h1>Job Application Tracker</h1>
+  
+  <!-- Application Form -->
   <form id="job-form">
     <label for="job-id">Job ID:</label>
     <input type="text" id="job-id" required placeholder="Enter Job ID">
@@ -21,29 +23,30 @@
     <label for="location">Location:</label>
     <input type="text" id="location" placeholder="Enter Location">
 
-    <label for="description">Job Description:</label>
-    <textarea id="description" rows="4" required placeholder="Enter Job Description"></textarea>
+    <label for="link">Job Link:</label>
+    <input type="url" id="link" placeholder="Enter Job Link">
 
-    <label for="skills">Skills (comma separated):</label>
-    <input type="text" id="skills" placeholder="Enter Skills (e.g., JavaScript, React)">
+    <label for="resume">Upload Resume:</label>
+    <input type="file" id="resume" accept="application/pdf">
 
     <label for="status">Application Status:</label>
-    <select id="status">
+    <select id="status" required>
       <option value="applied">Applied</option>
       <option value="interview">Interview</option>
       <option value="offer">Offer</option>
       <option value="rejected">Rejected</option>
     </select>
 
-    <label for="resume">Upload Resume:</label>
-    <input type="file" id="resume" accept="application/pdf">
-
     <button type="submit">Add Application</button>
   </form>
 
-  <div id="job-list">
-    <h2>Applied Jobs</h2>
-    <ul id="application-list"></ul>
+  <h2>Applied Jobs</h2>
+  <ul id="application-list"></ul>
+
+  <!-- Global Edit and Delete Controls -->
+  <div>
+    <button id="edit-button">Edit Application</button>
+    <button id="delete-button">Delete Application</button>
   </div>
 
   <script src="home.js"></script>

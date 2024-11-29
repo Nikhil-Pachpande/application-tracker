@@ -1,56 +1,34 @@
 document.addEventListener('DOMContentLoaded', function() {
     const jobForm = document.getElementById('job-form');
     const jobList = document.getElementById('application-list');
+    const editButton = document.getElementById('edit-button');
+    const deleteButton = document.getElementById('delete-button');
     let editingIndex = null; // to track which application is being edited
   
     // to load the job applications from local storage
     const loadApplications = () => {
       const applications = JSON.parse(localStorage.getItem('applications')) || [];
-      jobList.innerHTML = ''; // Clear existing applications
+      jobList.innerHTML = ''; // Clear exising applications
   
       applications.forEach((app, index) => {
         const li = document.createElement('li');
         li.classList.add('job-item');
-  
-        // to display the list of applications with Edit and Delete buttons
         li.innerHTML = `
-          <p><strong>${app.title}</strong> at ${app.company}</p>
+          <p><strong>Application ${index + 1}</strong></p>
+          <p>Job Title: ${app.title}</p>
+          <p>Company: ${app.company}</p>
           <p>Status: ${app.status}</p>
-          <button class="edit-btn" data-index="${index}">Edit</button>
-          <button class="delete-btn" data-index="${index}">Delete</button>
+          <p><a href="${app.link}" target="_blank">Job Link</a></p>
         `;
-  
-        // to add Edit and Delete event listeners
-        li.querySelector('.edit-btn').addEventListener('click', function() {
-          const appToEdit = applications[index];
-          editingIndex = index;
-          populateForm(appToEdit); // to populate the form with the selected application's data
-        });
-  
-        li.querySelector('.delete-btn').addEventListener('click', function() {
-          deleteApplication(index); // Delete the application
-        });
-  
         jobList.appendChild(li);
       });
     };
   
-    // to populate the form with selected application's data for editing
-    const populateForm = (app) => {
-      document.getElementById('job-id').value = app.jobId;
-      document.getElementById('job-title').value = app.title;
-      document.getElementById('company-name').value = app.company;
-      document.getElementById('location').value = app.location;
-      document.getElementById('description').value = app.description;
-      document.getElementById('skills').value = app.skills.join(', ');
-      document.getElementById('status').value = app.status;
-    };
-  
-    // to save new application to the local storage
+    // to save application to local storage
     const saveApplication = (application) => {
       const applications = JSON.parse(localStorage.getItem('applications')) || [];
       if (editingIndex !== null) {
-        applications[editingIndex] = application; // to update the application being edited
+        applications[editingIndex] = application; // to edit existing application
       } else {
         applications.push(application); // to add a new application
       }
@@ -58,15 +36,7 @@ document.addEventListener('DOMContentLoaded', function() {
       loadApplications(); // reloads the application list
     };
   
-    // to delete application from localStorage
-    const deleteApplication = (index) => {
-      const applications = JSON.parse(localStorage.getItem('applications')) || [];
-      applications.splice(index, 1);
-      localStorage.setItem('applications', JSON.stringify(applications));
-      loadApplications();
-    };
-  
-    // toandle form submission to add/edit job application
+    // Form submission handler
     jobForm.addEventListener('submit', function(event) {
       event.preventDefault();
   
@@ -74,37 +44,82 @@ document.addEventListener('DOMContentLoaded', function() {
       const title = document.getElementById('job-title').value;
       const company = document.getElementById('company-name').value;
       const location = document.getElementById('location').value;
-      const description = document.getElementById('description').value;
-      const skills = document.getElementById('skills').value.split(',').map(skill => skill.trim());
+      const link = document.getElementById('link').value;
       const status = document.getElementById('status').value;
       const resume = document.getElementById('resume').files[0];
   
       // input validation
-      if (!jobId || !title || !company || !description || skills.length === 0) {
-        alert('Please fill out all required fields.');
+      if (!jobId || !title || !company || !status) {
+        alert('Please fill all required fields.');
         return;
       }
   
-      if (resume) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          const application = {
-            jobId,
-            title,
-            company,
-            location,
-            description,
-            skills,
-            status,
-            resume: e.target.result // to store the resume as base64 data
-          };
-          saveApplication(application); // to save the new application
-        };
-        reader.readAsDataURL(resume); // to read the resume file as base64
-      } else {
-        alert('Please upload a resume.');
-      }
+      // Create an application object
+      const application = {
+        jobId,
+        title,
+        company,
+        location,
+        link,
+        resume: resume ? URL.createObjectURL(resume) : null,
+        status
+      };
+  
+      saveApplication(application); // to save the new or edited application
+  
+      // to reset the form to add a new application after saving
+      resetForm();
     });
   
-    loadApplications(); // loads previously stored applications when the popup opens
+    // to reset the form after saving or editing
+    const resetForm = () => {
+      jobForm.reset();
+      editingIndex = null;
+      jobForm.querySelector('button').textContent = 'Add Application';
+    };
+  
+    // Edit button handler
+    editButton.addEventListener('click', function() {
+      const appNumber = prompt('Enter the application number to edit:');
+      const applications = JSON.parse(localStorage.getItem('applications')) || [];
+      const appIndex = parseInt(appNumber) - 1;
+  
+      if (isNaN(appIndex) || appIndex < 0 || appIndex >= applications.length) {
+        alert('Invalid application number');
+        return;
+      }
+  
+      const appToEdit = applications[appIndex];
+      editingIndex = appIndex; // to track which application is being editing
+  
+      // to populate the form with the data
+      document.getElementById('job-id').value = appToEdit.jobId;
+      document.getElementById('job-title').value = appToEdit.title;
+      document.getElementById('company-name').value = appToEdit.company;
+      document.getElementById('location').value = appToEdit.location || '';
+      document.getElementById('link').value = appToEdit.link || '';
+      document.getElementById('status').value = appToEdit.status;
+  
+      // to change the button text to "Save Changes"
+      jobForm.querySelector('button').textContent = 'Save Changes';
+    });
+  
+    // Delete button handler
+    deleteButton.addEventListener('click', function() {
+      const appNumber = prompt('Enter the application number to delete:');
+      const applications = JSON.parse(localStorage.getItem('applications')) || [];
+      const appIndex = parseInt(appNumber) - 1;
+  
+      if (isNaN(appIndex) || appIndex < 0 || appIndex >= applications.length) {
+        alert('Invalid application number');
+        return;
+      }
+  
+      // to remove the application from the list
+      applications.splice(appIndex, 1);
+      localStorage.setItem('applications', JSON.stringify(applications));
+      loadApplications();
+    });
+  
+    loadApplications(); // loads the applications on page load
   });  
