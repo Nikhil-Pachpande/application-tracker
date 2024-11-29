@@ -2,21 +2,30 @@
     "manifest_version": 3,
     "name": "Job Application Tracker",
     "version": "1.0",
-    "description": "Track your job applications",
+    "description": "Track your job applications easily.",
     "permissions": [
       "storage"
     ],
     "action": {
-      "default_popup": "home.html",
+      "default_popup": "home.html", 
       "default_icon": {
         "16": "icons/icon16.png",
-        "48": "icons/icon48.png",
-        "100": "icons/icon100.png"
+        "50": "icons/icon50.png",
+        "128": "icons/icon128.png"
       }
     },
     "icons": {
       "16": "icons/icon16.png",
-      "48": "icons/icon48.png",
-      "100": "icons/icon100.png"
+      "50": "icons/icon50.png",
+      "128": "icons/icon128.png"
+    },
+    "content_security_policy": {
+    "extension_pages": {
+      "script-src": "'self'",
+      "object-src": "'self'"
     }
+  },
+  "privacy_policy": {
+    "url": "https://nikhil-pachpande.github.io/job-application-tracker-privacy-policy/"
+  }
   }  
