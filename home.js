@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const jobList = document.getElementById('application-list');
     const editButton = document.getElementById('edit-button');
     const deleteButton = document.getElementById('delete-button');
+    const totalApplicationsDisplay = document.createElement('p'); // to show the total number of applications
     let editingIndex = null; // to track which application is being edited
   
     // to load the job applications from local storage
@@ -26,6 +27,10 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
         jobList.appendChild(li);
       });
+  
+      // to show the total number of applications
+      totalApplicationsDisplay.textContent = `Total Applications: ${applications.length}`;
+      document.body.appendChild(totalApplicationsDisplay);
     };
   
     // to save application to local storage
