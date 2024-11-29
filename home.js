@@ -3,13 +3,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const jobList = document.getElementById('application-list');
     const editButton = document.getElementById('edit-button');
     const deleteButton = document.getElementById('delete-button');
-    const totalApplicationsDisplay = document.createElement('p'); // to show the total number of applications
+    const totalApplicationsDisplay = document.createElement('p'); // this variable will track the total number of applications
     let editingIndex = null; // to track which application is being edited
   
     // to load the job applications from local storage
     const loadApplications = () => {
       const applications = JSON.parse(localStorage.getItem('applications')) || [];
-      jobList.innerHTML = ''; // Clear exising applications
+      jobList.innerHTML = ''; // this will clear the exising applications
   
       applications.forEach((app, index) => {
         const li = document.createElement('li');
@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
       }
   
-      // Create an application object
+      // to create an application object which can be use to save a new or edited application in the Applied list
       const application = {
         jobId,
         title,
@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', function() {
       jobForm.querySelector('button').textContent = 'Add Application';
     };
   
-    // Edit button handler
+    // edit button handler
     editButton.addEventListener('click', function() {
       const appNumber = prompt('Enter the application number to edit:');
       const applications = JSON.parse(localStorage.getItem('applications')) || [];
@@ -113,7 +113,7 @@ document.addEventListener('DOMContentLoaded', function() {
       jobForm.querySelector('button').textContent = 'Save Changes';
     });
   
-    // Delete button handler
+    // delete button handler
     deleteButton.addEventListener('click', function() {
       const appNumber = prompt('Enter the application number to delete:');
       const applications = JSON.parse(localStorage.getItem('applications')) || [];
