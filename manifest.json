@@ -18,5 +18,14 @@
       "16": "icons/icon16.png",
       "50": "icons/icon50.png",
       "128": "icons/icon128.png"
+    },
+    "content_security_policy": {
+    "extension_pages": {
+      "script-src": "'self'",
+      "object-src": "'self'"
     }
+  },
+  "privacy_policy": {
+    "url": "https://username.github.io/job-application-tracker-privacy-policy/"
+  }
   }  
